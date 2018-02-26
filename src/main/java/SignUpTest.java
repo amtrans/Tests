@@ -2,6 +2,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import java.util.concurrent.TimeUnit;
@@ -40,11 +41,15 @@ public class SignUpTest {
     public void signUp() {
         driver.get("http://automationpractice.com");
         driver.findElement(By.cssSelector(".login")).click();
+
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        Assert.assertTrue((driver.findElement(By.cssSelector("#create-account_form")).isDisplayed()));
         String email = "mail"+RandomStringUtils.randomNumeric(5) + "@gmail.com"; //генерируем случайный email
         driver.findElement(By.cssSelector("#email_create")).sendKeys(email);
         driver.findElement(By.cssSelector("#SubmitCreate")).click();
 
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        Assert.assertTrue((driver.findElement(By.cssSelector("#account-creation_form")).isDisplayed()));
         driver.findElement(By.cssSelector("input[id='id_gender1']")).click();
         driver.findElement(By.cssSelector("#customer_firstname")).sendKeys("Taras");
         driver.findElement(By.cssSelector("#customer_lastname")).sendKeys("Shevchenko");
@@ -59,6 +64,6 @@ public class SignUpTest {
         driver.findElement(By.cssSelector("#submitAccount")).click();
 
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        driver.findElement(By.cssSelector(".logout")); //Проверяем наличие пункта меню Logout, потверждающего успешную регистрацию и вход на сайт
+        Assert.assertTrue((driver.findElement(By.cssSelector(".logout")).isDisplayed()));
     }
 }
